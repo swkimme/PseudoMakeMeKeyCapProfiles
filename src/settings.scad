@@ -8,7 +8,9 @@ $key_height = 1.0;
 // Keytop thickness, aka how many millimeters between the inside and outside of the top surface of the key
 $keytop_thickness = 1.5;
 // Wall thickness, aka the thickness of the sides of the keycap. note this is the total thickness, aka 3 = 1.5mm walls
-$wall_thickness = 1.4;
+$wall_thickness = 1.5;
+$wall_thickness_thick = 1.5;
+$wall_thickness_thin = 1.25;
 // Width of the very bottom of the key
 $bottom_key_width = 18.16;
 // Height (from the front) of the very bottom of the key

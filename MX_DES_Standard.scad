@@ -14,7 +14,7 @@ Version 2: Eliptical Rectangle
 */
 
 
-keyID1 = 0;
+keyID1 = 11;
 
 /*
 mirror([0,0,0])keycap(
@@ -23,15 +23,16 @@ mirror([0,0,0])keycap(
   Stem   = true, //tusn on shell and stems
   Dish   = true, //turn on dish cut
   Stab   = 0,
-  visualizeDish = false, // turn on debug visual of Dish
-  crossSection  = true, // center cut to check internal
-  homeDot = false, //turn on homedots
-  Legends = false
+  visualizeDish = true, // turn on debug visual of Dish
+  crossSection  = false, // center cut to check internal
+  homeDot = true, //turn on homedots
+  Legends = false,
  );
 */
+
 //#translate([0,38,13])cube([18-5.7, 18-5.7,1],center = true);
 //Parameters
-wallthickness = $wall_thickness; // 1.5 for norm, 1.25 for cast master
+//wallthickness = $wall_thickness; // 1.5 for norm, 1.25 for cast master
 topthickness  = 1.5 + $keytop_thickness;   // 3 for norm, 2.5 for cast master
 stepsize      = 40;  //resolution of Trajectory
 step          = 6;   //resolution of ellipes
@@ -50,30 +51,56 @@ stemLayers      = 50; //resolution of stem to cap top transition
 
 //%clearance_check();
 
+// DSA
+bottom_width = 1;
+top_width_difference = 8;
+key_height = 7.5;
+exponent = 1.9;
+cap_round_fin = 3;
+
+bw = bottom_width;
+twd = top_width_difference;
+kh = key_height;
+ex = exponent;
+crf = cap_round_fin;
+
+forward = 6;
+pitch1 = 10;
+thumb_pitch1 = -5;
+tpitch1 = thumb_pitch1;
+thumb_pitch2 = -55;
+tpitch2 = thumb_pitch2;
+pitch2 = -70;
+arch_init = 13;
+arch_fin = 15;
 keyParameters = //keyParameters[KeyID][ParameterID]
 [
-//                    가로, 세로, 가로곡률, 세로곡률, 높이,  기울임W, 기울임,윗판기울기,좌우기울기,꼬임, 마지막 둥글리기W,L, 앞뒤둥글기,상부, 좌우둥글기,상부, CapREx, StemEx
-//                    BotWid, BotLen, TWDif, TLDif, keyh, WSft, LSft,  XSkew, YSkew, ZSkew, WEx, LEx, CapR0i, CapR0f, CapR1i, CapR1f, CapREx, StemEx
+//                    가로, 세로, 가로곡률, 세로곡률, 높이,  기울임W, 기울임,윗판기울기,좌우기울기,꼬임, 마지막 둥글리기W,L, 앞뒤둥글기,상부, 좌우둥글기,상부, CapREx, StemEx, 벽두께
+//                    BotWid, BotLen, TWDif, TLDif, keyh, WSft, LSft,  XSkew, YSkew, ZSkew, WEx, LEx, CapR0i, CapR0f, CapR1i, CapR1f, CapREx, StemEx, WT
 //Column high sculpt 3 row system
     // modified
-    ["M 1u R4",         1, 1,   6.5,    6.5,  10.55,   0,    0,   9,     0,     0,   2,   2,      0,      3,      0,    3.5,     2, 2],
-    ["M 1u R3 Home",    1, 1,   6.5, 	6.5,  8.75,    0,   .5,   4,     0,     0,   2,   2,      0,      3,      0,    3.5,     2, 2],
-    ["M 1u R2",         1, 1,   6.5, 	6.5,  9.75,    0,    0, -13,     0,     0,   2,   2,      0,      3,      0,    3.5,     2, 2],
-    ["1u R5 mod",       1, 1,   6.5, 	6.5,  11.5,    0,    0,  -3,     0,     0,   2,   2,      0,      3,      0,    3.5,     2, 2],
+    ["M 1u R4",         1, 1,   6.5,    6.5,  10.55,   0,    0,   9,     0,     0,   2,   2,      0,      3,      0,    3.5,     2, 2, $wall_thickness_thick],
+    ["M 1u R3 Home",    1, 1,   6.5, 	6.5,  8.75,    0,   .5,   4,     0,     0,   2,   2,      0,      3,      0,    3.5,     2, 2, $wall_thickness_thick],
+    ["M 1u R2",         1, 1,   6.5, 	6.5,  9.75,    0,    0, -13,     0,     0,   2,   2,      0,      3,      0,    3.5,     2, 2, $wall_thickness_thick],
+    ["1u R5 mod",       1, 1,   6.5, 	6.5,  11.5,    0,    0,  -3,     0,     0,   2,   2,      0,      3,      0,    3.5,     2, 2, $wall_thickness_thick],
 
     // original DES 0~5
-    ["1u R4 8",        1,  1,   6.5,   6.5, 10.55,    0,    0,   9,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
-    ["1u R3 Home",      1,  1,   6.5, 	6.5, 8.75,    0,   .5,    4,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
-    ["1u R2",           1,  1,   6.5, 	6.5, 9.75,    0,    0,   -13,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
-    ["1u R3 deepdish",  1,  1,   6.5,   6.5, 8.75,    0,    0,     4,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
-    ["1u R5 mod",       1,  1,   6.5, 	6.5, 11.5,    0,    0,    -3,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
-    ["1u R1 num",       1,  1,   6.5, 	6.5, 15.0,    0,  -.5,    20,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
+    ["1u R4 8",        1,  1,   6.5,   6.5, 10.55,    0,    0,   9,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2, $wall_thickness_thick],
+    ["1u R3 Home",      1,  1,   6.5, 	6.5, 8.75,    0,   .5,    4,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2, $wall_thickness_thick],
+    ["1u R2",           1,  1,   6.5, 	6.5, 9.75,    0,    0,   -13,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2, $wall_thickness_thick],
+    ["1u R3 deepdish",  1,  1,   6.5,   6.5, 8.75,    0,    0,     4,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2, $wall_thickness_thick],
+    ["1u R5 mod",       1,  1,   6.5, 	6.5, 11.5,    0,    0,    -3,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2, $wall_thickness_thick],
+    ["1u R1 num",       1,  1,   6.5, 	6.5, 15.0,    0,  -.5,    20,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2, $wall_thickness_thick],
 
     // modified DSA
-    ["DSA",            21.86,  1,   6.5, 	 6.5, 11.5,    0,    0,    -3,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
-    ["DSA Thumb",      21.86,  1,   6.5, 	 6.5,10.55,    0,    0,     9,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
-    ["DSA tall",       21.86,  1,   6.5, 	 6.5, 11.5,    0,    0,    -3,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
-    ["DSA tall Thumb", 21.86,  1,   6.5, 	 6.5,10.55,    0,    0,     9,     0,     0,   2,   2,      1,      5,      1,    3.5,     2,       2],
+    ["DSA Thumb",          bw,  bw, twd, twd, kh,     0, 0, 0, 0, 0, ex, ex, 0, crf, 0, crf, ex, ex, $wall_thickness_thick], //dsa thumb
+    ["DSA",                bw,  bw, twd, twd, kh,     0, 0, 0, 0, 0, ex, ex, 0, crf, 0, crf, ex, ex, $wall_thickness_thick], //dsa norm
+    ["DSA tall Thumb",     bw,  bw, twd, twd, kh+1.5, 0, 0, 0, 0, 0, ex, ex, 0, crf, 0, crf, ex, ex, $wall_thickness_thick], //dsa thumb tall
+    ["DSA tall",           bw,  bw, twd, twd, kh+1.5, 0, 0, 0, 0, 0, ex, ex, 0, crf, 0, crf, ex, ex, $wall_thickness_thick], //dsa norm tall
+    ["DSA Thumb Thin",     bw,  bw, twd, twd, kh,     0, 0, 0, 0, 0, ex, ex, 0, crf, 0, crf, ex, ex, $wall_thickness_thin], //dsa thumb
+    ["DSA Thin",           bw,  bw, twd, twd, kh,     0, 0, 0, 0, 0, ex, ex, 0, crf, 0, crf, ex, ex, $wall_thickness_thin], //dsa norm
+    ["DSA tall Thumb Thin",bw,  bw, twd, twd, kh+1.5, 0, 0, 0, 0, 0, ex, ex, 0, crf, 0, crf, ex, ex, $wall_thickness_thin], //dsa thumb tall
+    ["DSA tall Thin",      bw,  bw, twd, twd, kh+1.5, 0, 0, 0, 0, 0, ex, ex, 0, crf, 0, crf, ex, ex, $wall_thickness_thin], //dsa norm tall
 
 ];
 
@@ -96,10 +123,14 @@ dishParameters = //dishParameter[keyID][ParameteID]
   [   6,    3,   13,   30,      5,    1.9,   8.9,    15,     2,        5,  4.4,   10,  -50,    8.9,    16,     2], //R1
 
   // modified DSA
-  [   6,    3,   -5,  -50,      5,    1.8,  12.4,    18,     2,        6,  3.5,   13,  -50,   12.4,    19,     2], //R5
-  [   6,    3,   18,  -50,      5,    1.8,  12.4,    21,     2,        5,  4.4,    5,  -55,   12.4,    19,     2], //R4
-  [   6,    3,   -5,  -50,      5,    1.8,  12.4,    18,     2,        6,  3.5,   13,  -50,   12.4,    19,     2], //R5
-  [   6,    3,   18,  -50,      5,    1.8,  12.4,    21,     2,        5,  4.4,    5,  -55,   12.4,    19,     2], //R4
+  [forward,     2, pitch1, pitch2, 4,    1.8, arch_init, arch_fin,     2, forward,     3, tpitch1, tpitch2, arch_init, arch_fin,     2], //dsa thumb
+  [forward,     2, pitch1, pitch2, 4,    1.8, arch_init, arch_fin,     2, forward,     2,  pitch1,  pitch2, arch_init, arch_fin,     2], //dsa norm
+  [forward-0.2, 2, pitch1, pitch2, 4,    1.8, arch_init, arch_fin,     2, forward-0.2, 3, tpitch1, tpitch2, arch_init, arch_fin,     2], //dsa thumb
+  [forward,     2, pitch1, pitch2, 4,    1.8, arch_init, arch_fin,     2, forward,     2,  pitch1,  pitch2, arch_init, arch_fin,     2], //dsa norm
+  [forward,     2, pitch1, pitch2, 4,    1.8, arch_init, arch_fin,     2, forward,     3, tpitch1, tpitch2, arch_init, arch_fin,     2], //dsa thumb
+  [forward,     2, pitch1, pitch2, 4,    1.8, arch_init, arch_fin,     2, forward,     2,  pitch1,  pitch2, arch_init, arch_fin,     2], //dsa norm
+  [forward-0.2, 2, pitch1, pitch2, 4,    1.8, arch_init, arch_fin,     2, forward-0.2, 3, tpitch1, tpitch2, arch_init, arch_fin,     2], //dsa thumb
+  [forward,     2, pitch1, pitch2, 4,    1.8, arch_init, arch_fin,     2, forward,     2,  pitch1,  pitch2, arch_init, arch_fin,     2], //dsa norm
 ];
 
 function FrontForward1(keyID) = dishParameters[keyID][0];  //
@@ -137,6 +168,7 @@ function CapRound1i(keyID)   = keyParameters[keyID][15];
 function CapRound1f(keyID)   = keyParameters[keyID][16];
 function ChamExponent(keyID) = keyParameters[keyID][17];
 function StemExponent(keyID) = keyParameters[keyID][18];
+function WallThickness(keyID) = keyParameters[keyID][19];
 
 function FrontTrajectory(keyID) =
   [
@@ -207,8 +239,8 @@ function CapRadius(t, keyID) = pow(t/layers, ChamExponent(keyID))*ChamfFinRad(ke
 
 function InnerTransform(t, keyID) =
   [
-    pow(t/layers, WidExponent(keyID)) * (BottomWidth(keyID)-TopLenDiff(keyID)-wallthickness) + (1-pow(t/layers, WidExponent(keyID)))*(BottomWidth(keyID)-wallthickness*2),
-    pow(t/layers, LenExponent(keyID)) * (BottomLength(keyID)-TopLenDiff(keyID)-wallthickness) + (1-pow(t/layers, LenExponent(keyID)))*(BottomLength(keyID)-wallthickness*2)
+    pow(t/layers, WidExponent(keyID)) * (BottomWidth(keyID)-TopLenDiff(keyID)) + (1-pow(t/layers, WidExponent(keyID)))*(BottomWidth(keyID)-WallThickness(keyID)*2),
+    pow(t/layers, LenExponent(keyID)) * (BottomLength(keyID)-TopLenDiff(keyID)) + (1-pow(t/layers, LenExponent(keyID)))*(BottomLength(keyID)-WallThickness(keyID)*2)
   ];
 
 function StemTranslation(t, keyID) =
@@ -227,8 +259,8 @@ function StemRotation(t, keyID) =
 
 function StemTransform(t, keyID) =
   [
-    pow(t/stemLayers, StemExponent(keyID))*(BottomWidth(keyID) -TopLenDiff(keyID)-wallthickness) + (1-pow(t/stemLayers, StemExponent(keyID)))*(stemWid - 2*slop),
-    pow(t/stemLayers, StemExponent(keyID))*(BottomLength(keyID)-TopLenDiff(keyID)-wallthickness) + (1-pow(t/stemLayers, StemExponent(keyID)))*(stemLen - 2*slop)
+    pow(t/stemLayers, StemExponent(keyID))*(BottomWidth(keyID) -TopLenDiff(keyID)-WallThickness(keyID)) + (1-pow(t/stemLayers, StemExponent(keyID)))*(stemWid - 2*slop),
+    pow(t/stemLayers, StemExponent(keyID))*(BottomLength(keyID)-TopLenDiff(keyID)-WallThickness(keyID)) + (1-pow(t/stemLayers, StemExponent(keyID)))*(stemLen - 2*slop)
   ];
 
 function StemRadius(t, keyID) = pow(t/stemLayers,3)*3 + (1-pow(t/stemLayers, 3))*1;
@@ -248,6 +280,13 @@ module keycap(keyID = 0, cutLen = 0, visualizeDish = false, Dish = true, Stem = 
 
   FrontCurve = [ for(i=[0:len(FrontPath)-1]) transform(FrontPath[i], DishShape(DishDepth(keyID), FrontDishArc(i), 1, d = 0)) ];
   BackCurve  = [ for(i=[0:len(BackPath)-1])  transform(BackPath[i],  DishShape(DishDepth(keyID),  BackDishArc(i), 1, d = 0)) ];
+
+  //Homing dot
+  if(homeDot == true){
+    rotate([0,YAngleSkew(keyID),ZAngleSkew(keyID)])translate([0,0,KeyHeight(keyID)-DishHeightDif(keyID)-0.45]){
+      for (i=[0:1:2]) translate([-1.3+1.3*i,0,0])sphere(r = dotRadius, $fn = 100, $fa = 12, $fs = 2);
+    }
+  }
 
   //builds
   difference(){
@@ -293,21 +332,6 @@ module keycap(keyID = 0, cutLen = 0, visualizeDish = false, Dish = true, Stem = 
        translate([0,-15,-.1])cube([15,30,20]);
 //      translate([-15.1,-15,-.1])cube([15,30,20]);
      }
-    if(homeDot == true){
-      // center dot
-      #translate([0,0,KeyHeight(keyID)-DishHeightDif(keyID)-0.1])sphere(r = dotRadius); // center dot
-      #translate([1.2,0,KeyHeight(keyID)-DishHeightDif(keyID)-0.1])sphere(r = dotRadius); // center dot
-      #translate([-1.2,0,KeyHeight(keyID)-DishHeightDif(keyID)-0.1])sphere(r = dotRadius); // center dot
-      // double bar dots
-//      rotate([-XAngleSkew(keyID),YAngleSkew(keyID),ZAngleSkew(keyID)])translate([.75,-4.5,KeyHeight(keyID)-DishHeightDif(keyID)+0.5])sphere(r = dotRadius); // center dot
-//      rotate([-XAngleSkew(keyID),YAngleSkew(keyID),ZAngleSkew(keyID)])translate([-.75,-4.5,KeyHeight(keyID)-DishHeightDif(keyID)+0.5])sphere(r = dotRadius); // center dot
-      //tri center dots
-     #rotate([0,YAngleSkew(keyID),ZAngleSkew(keyID)])translate([0,0,KeyHeight(keyID)-DishHeightDif(keyID)-0.1]){
-//        rotate([0,0,0])translate([0,.75,0])sphere(r = dotRadius); // center dot
-//        rotate([0,0,120])translate([0,.75,0])sphere(r = dotRadius); // center dot
-//        rotate([0,0,240])translate([0,.75,0])sphere(r = dotRadius); // center dot
-      }
-    }
   }
   //Homing dot
 
